@@ -1,0 +1,5 @@
+INFO:root:<sqlite3.Connection object at 0x7fee285aab10>
+INFO:root:1
+INFO:root:None
+INFO:root:(1, u'tests')
+INFO:root:None
