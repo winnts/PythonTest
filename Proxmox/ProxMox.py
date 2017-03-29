@@ -37,6 +37,8 @@ class ProxMox(object):
             time.sleep(3)
         if startup_status['exitstatus'] == 'OK':
             print 'VM Started Successfully'
+        else:
+            print 'Starting VM FILED!'
 
     def pm_stop_vm(self, target_node, vm_id):
         print 'Trying to stop...'
@@ -48,18 +50,34 @@ class ProxMox(object):
             time.sleep(3)
         if stop_status['exitstatus'] == 'OK':
             print 'VM Stopped Successfully'
+        else:
+            print 'Stopping VM FILED!'
+
+    def pm_delete_vm(self, target_node, vm_id):
+        print 'Trying to delete...'
+        delete_response = target_node.qemu(vm_id).delete()
+        delete_status = target_node.tasks(delete_response).status.get()
+        while delete_status['status'] == 'running':
+            delete_status = target_node.tasks(delete_response).status.get()
+            print 'Delete VM process: ' + delete_status['status']
+            time.sleep(3)
+        if delete_status['exitstatus'] == 'OK':
+            print 'VM Deleted Successfully'
+        else:
+            print 'Delete VM FILED!'
 
 
-node_name = 'pve03'
-new_id = 3043
-template_id = 254
-new_hostname = 'CIT45-WIN7-64'
+def pm_test():
+    node_name = 'pve03'
+    new_id = 3043
+    template_id = 254
+    new_hostname = 'CIT45-WIN7-64'
 
-proxmox = ProxMox()
-connect = proxmox.pm_connect('', '', '')
-target_node = proxmox.pm_get_node(connect, node_name)
+    proxmox = ProxMox()
+    connect = proxmox.pm_connect('', '', '')
+    target_node = proxmox.pm_get_node(connect, node_name)
 
-proxmox.pm_clone_vm(target_node, template_id, new_id, new_hostname)
-proxmox.pm_start_vm(target_node, new_id)
-time.sleep(30)
-proxmox.pm_stop_vm(target_node, new_id)
+    proxmox.pm_clone_vm(target_node, template_id, new_id, new_hostname)
+    proxmox.pm_start_vm(target_node, new_id)
+    time.sleep(30)
+    proxmox.pm_stop_vm(target_node, new_id)
