@@ -2,10 +2,11 @@ import sqlite3
 import sys
 import logging
 
+cdm_path = '/home/adyachenko/IdeaProjects/PythonTest/'
 con = None
 logging.basicConfig(filename='sqlite.log', level=logging.DEBUG)
 try:
-    con = sqlite3.connect('/home/adyachenko/IdeaProjects/PythonTest/cdm.db')
+    con = sqlite3.connect(cdm_path+'cdm.db')
     cur = con.cursor()
     cur.execute('select * from "orm::models::installertasks::installertasks"')
     logging.info(cur.fetchone())
