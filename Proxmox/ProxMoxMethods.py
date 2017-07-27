@@ -25,8 +25,7 @@ class ProxMoxMethods(object):
         proxmox.pm_stop_vm(target_node, vm_id)
 
     @staticmethod
-    def proxmox_delete_vm(node_name, vm_id):
+    def proxmox_delete_vm(vm_id):
         proxmox = ProxMox()
         connect = proxmox.pm_connect('', '', '')
-        target_node = proxmox.pm_get_node(connect, node_name)
-        proxmox.pm_delete_vm(target_node, vm_id)
+        proxmox.pm_delete_vm(connect, vm_id)
